@@ -22,12 +22,12 @@ function createAppServer() {
   // Register resources (UI widgets) for UI tools
   server.registerResource(
     "show_stock_performance",
-    "ui://widgets/show_stock_performance.html",
+    "template://widgets/show_stock_performance",
     {},
     async () => ({
       contents: [
         {
-          uri: "ui://widgets/show_stock_performance.html",
+          uri: "template://widgets/show_stock_performance",
           mimeType: "text/html+skybridge",
           text: showStockPerformanceWidgetHtml,
           _meta: {
@@ -55,7 +55,7 @@ function createAppServer() {
                 "https://d.tiles.mapbox.com",
                 "https://images.unsplash.com",
                 "https://storage.googleapis.com"
-              ]
+              ],
             },
           },
         },
@@ -74,15 +74,15 @@ function createAppServer() {
         readOnlyHint: true,
         destructiveHint: false,
         openWorldHint: false,
+        idempotentHint: true,
       },
       _meta: {
-        "openai/outputTemplate": "ui://widgets/show_stock_performance.html",
-        "openai/visibility": "public",
+        "openai/outputTemplate": "template://widgets/show_stock_performance",
         "openai/widgetAccessible": true,
       },
     },
     async (args) => {
-      return await handleShowStockPerformance(args as { ticker: string });
+      return await handleShowStockPerformance(args);
     }
   );
 
@@ -127,7 +127,7 @@ const httpServer = createServer(async (req, res) => {
 
     const server = createAppServer();
     const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: undefined, // stateless mode
+      sessionIdGenerator: undefined,
       enableJsonResponse: true,
     });
 

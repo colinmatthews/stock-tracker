@@ -4,11 +4,11 @@
 
 ## Executive Summary
 
-We built Stock Tracker to give users a quick, conversational way to check stock performance right in ChatGPT. Instead of bouncing between browser tabs or opening a separate finance app, users can just ask about any major stock and get live price data, change percentages, and visual charts. The prototype connects to Yahoo Finance's public API to pull real-time market data for tickers like AAPL, TSLA, MSFT, and others.
+We built Stock Tracker to give users a quick, conversational way to check stock performance without leaving ChatGPT. Instead of opening a separate finance app or browser tab, users can just ask about any major stock ticker and see real-time price data, percentage changes, and performance charts right in the conversation. This feels like a natural extension of how people already use ChatGPT for quick information lookups.
 
-The core functionality is working well - we're successfully fetching and displaying stock data through the show_stock_performance UI tool. Since we don't have eval runs yet, we haven't stress-tested edge cases, but the happy path (looking up valid, active stock tickers) is solid in manual testing.
+The prototype is working with live data from Yahoo Finance, which is great news since we don't need authentication to access their public API. Users can query any ticker symbol (AAPL, TSLA, MSFT, GOOGL, AMZN, etc.) and get back meaningful performance data. We haven't run formal evals yet, so we're handing off a functional prototype without validated test coverage.
 
-For production, engineering needs to integrate the Yahoo Finance API endpoint (GET yahoo-finance/v8/finance/chart/{{ticker}}) and handle the response mapping to our UI. The good news is there's no auth required, so integration should be straightforward. Key areas to focus on: error handling for invalid tickers, graceful degradation when market data is unavailable (weekends, holidays, delisted stocks), and performance optimization since we're hitting an external API on every request.
+For production, engineering needs to integrate the Yahoo Finance API endpoint (GET https://query1.finance.yahoo.com/v8/finance/chart/{{ticker}}) and build out the stock performance UI component. Key focus areas: handling invalid ticker symbols gracefully, managing API rate limits since Yahoo Finance is a free public endpoint, and making sure the charts render cleanly across different devices. We should also consider error states for market closures, delisted stocks, or API downtime.
 
 ## Tools
 
@@ -17,12 +17,12 @@ For production, engineering needs to integrate the Yahoo Finance API endpoint (G
 **Type:** UI Component
 **Display Mode:** inline
 
-Displays a stock's current price, percentage change, and performance charts for a given ticker symbol. Users get a visual snapshot of how the stock is performing.
+Displays comprehensive stock performance data including current price, price change, percentage change, and interactive charts showing historical performance trends.
 
 **Available Actions:**
-- View the current stock price and day's change percentage
-- Review performance charts showing price movement
-- Reference the ticker symbol displayed at the top
+- View current stock price and daily change percentage
+- Examine performance charts showing price trends over time
+- Check the ticker symbol and company information displayed
 
 **Parameters:**
 

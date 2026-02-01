@@ -1,4 +1,5 @@
 // Stock Performance Tracker - Real-time data from Yahoo Finance
+// Rebundle trigger
 import React, { useState, useEffect, useRef } from 'react';
 import { useWidgetProps, useToolInput, useDisplayMode, useRequestDisplayMode, useWidgetState, useCallTool } from 'sdk-hooks';
 import { TrendingUp, TrendingDown, Maximize2, ArrowLeft, RefreshCw } from 'lucide-react';

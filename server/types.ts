@@ -6,54 +6,34 @@ export interface ShowStockPerformanceInput {
 }
 
 /**
- * Yahoo Finance API response structure
+ * Chart data point from Yahoo Finance
  */
-export interface YahooFinanceChart {
-  chart: {
-    result: Array<{
-      meta: {
-        currency: string;
-        symbol: string;
-        exchangeName: string;
-        instrumentType: string;
-        firstTradeDate: number;
-        regularMarketTime: number;
-        gmtoffset: number;
-        timezone: string;
-        exchangeTimezoneName: string;
-        regularMarketPrice: number;
-        chartPreviousClose: number;
-        previousClose: number;
-        scale: number;
-        priceHint: number;
-        currentTradingPeriod: {
-          pre: { timezone: string; start: number; end: number; gmtoffset: number };
-          regular: { timezone: string; start: number; end: number; gmtoffset: number };
-          post: { timezone: string; start: number; end: number; gmtoffset: number };
-        };
-        dataGranularity: string;
-        range: string;
-        validRanges: string[];
-      };
-      timestamp: number[];
-      indicators: {
-        quote: Array<{
-          high: (number | null)[];
-          volume: (number | null)[];
-          close: (number | null)[];
-          open: (number | null)[];
-          low: (number | null)[];
-        }>;
-        adjclose?: Array<{
-          adjclose: (number | null)[];
-        }>;
-      };
-    }>;
-    error: null | {
-      code: string;
-      description: string;
-    };
-  };
+export interface ChartDataPoint {
+  timestamp: number;
+  date: string;
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  close: number | null;
+  volume: number | null;
+}
+
+/**
+ * Structured content for stock performance widget
+ */
+export interface StockPerformanceData {
+  ticker: string;
+  companyName: string;
+  currentPrice: number;
+  currency: string;
+  priceChange: number;
+  priceChangePercent: number;
+  previousClose: number;
+  marketState: string;
+  regularMarketTime: string | null;
+  chartData: ChartDataPoint[];
+  range: string;
+  interval: string;
 }
 
 /**
@@ -64,5 +44,40 @@ export interface ShowStockPerformanceResponse {
     type: "text";
     text: string;
   }>;
-  structuredContent: YahooFinanceChart | Record<string, unknown>;
+  structuredContent?: StockPerformanceData;
+  isError?: boolean;
+}
+
+/**
+ * Yahoo Finance API response types
+ */
+export interface YahooFinanceChartResponse {
+  chart: {
+    result: Array<{
+      meta: {
+        currency?: string;
+        symbol: string;
+        regularMarketPrice?: number;
+        previousClose?: number;
+        regularMarketTime?: number;
+        marketState?: string;
+        longName?: string;
+        shortName?: string;
+      };
+      timestamp: number[];
+      indicators: {
+        quote: Array<{
+          open: (number | null)[];
+          high: (number | null)[];
+          low: (number | null)[];
+          close: (number | null)[];
+          volume: (number | null)[];
+        }>;
+      };
+    }>;
+    error: null | {
+      code: string;
+      description: string;
+    };
+  };
 }
