@@ -1,0 +1,20 @@
+{
+  "name": "stock-tracker-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server/mcp-server.js",
+  "scripts": {
+    "dev": "tsx server/mcp-server.ts",
+    "build": "tsc",
+    "start": "node server/mcp-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.6.0"
+  }
+}

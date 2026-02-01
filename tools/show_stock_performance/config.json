@@ -1,0 +1,48 @@
+{
+  "name": "show_stock_performance",
+  "description": "Display stock performance with price, change, and charts. Pass a stock ticker symbol like AAPL, TSLA, MSFT, GOOGL, AMZN.\n\nExample: { \"ticker\": \"AAPL\" }",
+  "kind": "ui",
+  "displayMode": "inline",
+  "proxyAction": {
+    "path": "/v8/finance/chart/{{ticker}}",
+    "method": "GET",
+    "queryParams": {
+      "range": "1mo",
+      "interval": "1d"
+    },
+    "endpointName": "yahoo-finance"
+  },
+  "mockAction": null,
+  "mockDataSource": null,
+  "mcpMeta": {
+    "openai": {
+      "outputTemplate": "template://widgets/show_stock_performance"
+    },
+    "templateUri": "template://widgets/show_stock_performance",
+    "openai/widgetCSP": {
+      "frame_domains": [],
+      "connect_domains": [
+        "https://api.mapbox.com",
+        "https://events.mapbox.com",
+        "https://tiles.mapbox.com",
+        "https://a.tiles.mapbox.com",
+        "https://b.tiles.mapbox.com",
+        "https://c.tiles.mapbox.com",
+        "https://d.tiles.mapbox.com"
+      ],
+      "redirect_domains": [],
+      "resource_domains": [
+        "https://api.mapbox.com",
+        "https://tiles.mapbox.com",
+        "https://a.tiles.mapbox.com",
+        "https://b.tiles.mapbox.com",
+        "https://c.tiles.mapbox.com",
+        "https://d.tiles.mapbox.com",
+        "https://images.unsplash.com",
+        "https://storage.googleapis.com"
+      ]
+    },
+    "openai/widgetAccessible": true,
+    "openai/widgetPrefersBorder": true
+  }
+}
