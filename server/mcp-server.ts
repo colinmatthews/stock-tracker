@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
-import { handleShowStockPerformance } from "./tool-handlers.js";
+import { handleShowStockPerformance } from "./tool-handlers";
 
 // Read widget HTML files for UI tools
 const showStockPerformanceWidgetHtml = readFileSync(
@@ -19,21 +19,21 @@ const showStockPerformanceInputSchema = {
 function createAppServer() {
   const server = new McpServer({ name: "stock-tracker", version: "0.1.0" });
 
-  // Register resource for show_stock_performance UI widget
+  // Register resources (UI widgets) for UI tools
   server.registerResource(
     "show_stock_performance",
-    "template://widgets/show_stock_performance",
+    "ui://widgets/show_stock_performance.html",
     {},
     async () => ({
       contents: [
         {
-          uri: "template://widgets/show_stock_performance",
+          uri: "ui://widgets/show_stock_performance.html",
           mimeType: "text/html+skybridge",
           text: showStockPerformanceWidgetHtml,
           _meta: {
             "openai/widgetPrefersBorder": true,
             "openai/widgetAccessible": true,
-            "openai/widgetDescription": "Display stock performance with price, change, and charts for a given ticker symbol",
+            "openai/widgetDescription": "Display stock performance with price, change, and charts",
             "openai/widgetCSP": {
               frame_domains: [],
               connect_domains: [
@@ -43,7 +43,7 @@ function createAppServer() {
                 "https://a.tiles.mapbox.com",
                 "https://b.tiles.mapbox.com",
                 "https://c.tiles.mapbox.com",
-                "https://d.tiles.mapbox.com",
+                "https://d.tiles.mapbox.com"
               ],
               redirect_domains: [],
               resource_domains: [
@@ -54,8 +54,8 @@ function createAppServer() {
                 "https://c.tiles.mapbox.com",
                 "https://d.tiles.mapbox.com",
                 "https://images.unsplash.com",
-                "https://storage.googleapis.com",
-              ],
+                "https://storage.googleapis.com"
+              ]
             },
           },
         },
@@ -63,7 +63,7 @@ function createAppServer() {
     })
   );
 
-  // Register show_stock_performance tool
+  // Register tools with FULL _meta from mcpMeta
   server.registerTool(
     "show_stock_performance",
     {
@@ -74,14 +74,11 @@ function createAppServer() {
         readOnlyHint: true,
         destructiveHint: false,
         openWorldHint: false,
-        idempotentHint: true,
       },
       _meta: {
-        "openai/outputTemplate": "template://widgets/show_stock_performance",
+        "openai/outputTemplate": "ui://widgets/show_stock_performance.html",
         "openai/visibility": "public",
         "openai/widgetAccessible": true,
-        "openai/toolInvocation/invoking": "Loading stock data...",
-        "openai/toolInvocation/invoked": "Stock data loaded",
       },
     },
     async (args) => {
@@ -118,7 +115,7 @@ const httpServer = createServer(async (req, res) => {
 
   // Health check
   if (req.method === "GET" && url.pathname === "/") {
-    res.writeHead(200, { "content-type": "text/plain" }).end("Stock Tracker MCP Server");
+    res.writeHead(200, { "content-type": "text/plain" }).end("MCP Server");
     return;
   }
 
@@ -156,5 +153,5 @@ const httpServer = createServer(async (req, res) => {
 });
 
 httpServer.listen(port, () => {
-  console.log(`Stock Tracker MCP server listening on http://localhost:${port}${MCP_PATH}`);
+  console.log(`MCP server listening on http://localhost:${port}${MCP_PATH}`);
 });
